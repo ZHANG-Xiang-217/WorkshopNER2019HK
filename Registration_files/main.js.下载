@@ -1,0 +1,131 @@
+/**
+* Project description details here in multiple lines
+*
+* @company Creasant Digital
+* @project HKUST CASI FES
+* @author  Jimmy LAU <jimmylau@creasant.com>
+* @version 1.0.1
+* @since   2018-03-19
+*/
+
+var MainApp = (function(win, doc, $, undefined) {
+  var DEBUG = false;
+  var NS = 'JML';
+  var VERSION = 'v1.0.1';
+  var CONSOLE = win.console ? true : false;
+  var STL_HEAD = 'background:#2c3e50;padding:1px;border-radius:3px 0 0 3px;color:#fff;';
+  var STL_BODY = 'background:#2980b9;padding:1px;border-radius:0 3px 3px 0;color: #fff;';
+  var STL_FOOT = 'background:transparent;';
+
+  var debugOptions = {
+    name: '',
+    msg: [],
+    flag: false
+  };
+
+  var debugTrace = function (newOpts) {
+    var opts = {};
+    $.extend(opts, debugOptions, newOpts);
+
+    if (DEBUG && CONSOLE) {
+      if (opts.flag) {
+        // console.log('%c ' + NS + ' %c MainApp (' + VERSION + ') %c', STL_HEAD, STL_BODY, STL_FOOT);
+      } else {
+        if (opts.name) {
+          console.group('FX: ', opts.name);
+        }
+        if (opts.msg.length > 0) {
+          opts.msg.forEach(function(v) {
+            console.log(v);
+          });
+        }
+        if (opts.name) {
+          console.groupEnd();
+        }
+      }
+    }
+  };
+
+  var appVersion = function() {
+    if (CONSOLE) {
+      console.log('%c ' + NS + ' %c ' + ' HKUST-CASI-FES (' + VERSION + ') %c', STL_HEAD, STL_BODY, STL_FOOT);
+    }
+    return NS + ' ' + VERSION;
+  };
+
+  var showDesign = function() {
+    /* DEBUG */
+    $('body').append('<div class="design"></div>')
+      .append('<div class="control"></div>');
+
+    $('.control').on('click', function() {
+      $('.design').toggleClass('show');
+    });
+  };
+
+  var loadGoogleFonts = function() {
+    debugTrace({
+      name: 'loadGoogleFonts',
+      msg: ['Load Google Fonts: Fjalla One']
+    });
+
+    WebFont.load({
+      google: {
+        families: ['Fjalla One']
+      }
+    });
+  };
+
+  var tabMenu = function() {
+    debugTrace({
+      name: 'tabMenu',
+      msg: ['TabMneu module']
+    });
+
+    if ($('.tab-menu').length > 0) {
+      var tabID = '';
+      $('.tab-menu__btn').on('click', function(e) {
+        e.preventDefault();
+        $(this).parent().siblings().removeClass('active');
+        $(this).parent().addClass('active');
+
+        tabID = $(this).attr('href');
+
+        if ($('.tab-content').length > 0 && tabID !== '') {
+          tabContent = $('.tab-content__one'+tabID);
+          tabContent.siblings().removeClass('active');
+          tabContent.addClass('active');
+        }
+      });
+    }
+  };
+
+  var navMenu = function() {
+    debugTrace({
+      name: 'navMenu',
+      msg: ['NavMenu module']
+    });
+
+    $('.header-mobile__menu').on('click', function() {
+      $(this).toggleClass('active');
+      $('.header-desktop').toggleClass('active');
+    });
+  };
+
+  return {
+    version: appVersion(),
+    init: function() {
+      // INIT GLOBAL FUNCS
+      // loadGoogleFonts();
+      navMenu();
+      tabMenu();
+
+      // if (DEBUG) {
+      //   showDesign();
+      // }
+    }
+  };
+
+})(this, this.document, jQuery);
+
+MainApp.init();
