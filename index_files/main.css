@@ -240,7 +240,7 @@ main a:hover {
 
 @media only screen and (max-width:767px) {
 .header-mobile__bg img {
-	transform: scale(.2)
+	transform: scale(.4)
 }
 }
 .header-mobile__menu {
